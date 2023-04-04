@@ -1,10 +1,10 @@
 class Node {
-  val = null;
-  next = null;
+  val;
+  next;
   // prev = null;
-  constructor(val = null, next = null) {
-    this.val = val;
-    this.next = next;
+  constructor(val, next) {
+    this.val = val ?? null;
+    this.next = next ?? null;
   }
 }
 
@@ -17,7 +17,7 @@ class DoublyNode extends Node {
 }
 
 export class LinkedList {
-  head = null;
+  head;
   count = 0;
   push(element) {
     let node = new Node(element),
@@ -125,12 +125,14 @@ export class LinkedList {
 }
 
 class DoubleLinkedList extends LinkedList {
-  head = null;
-  tail = null;
-  constructor() {}
+  head;
+  tail;
+  constructor() {
+    super();
+  }
 
   add(item) {
-    let node = new Node(item);
+    let node = new DoublyNode(item);
 
     if (!this.head) {
       this.head = node;
@@ -305,9 +307,9 @@ class DoubleLinkedList extends LinkedList {
  * }
  */
 /**
- * @param {ListNode} head
+ * @param {Node} head
  * @param {number} k
- * @return {ListNode}
+ * @return {Node}
  */
 var reverseKGroup = function (head, k) {
   if (!head || !head.next) {
@@ -341,3 +343,66 @@ function reverse(head, tail) {
 
   return prev;
 }
+
+/**
+ * @desc
+ * @param {Node} list1
+ * @param {Node} list2
+ * @return {Node}
+ */
+var mergeTwoLists = function (list1, list2) {
+  let head = new Node(),
+    curr = head;
+
+  while (list1 && list2) {
+    if (list1.val <= list2.val) {
+      curr.next = list1;
+      list1 = list1.next;
+    } else {
+      curr.next = list2;
+      list2 = list2.next;
+    }
+    curr = curr.next;
+  }
+
+  if (list1) {
+    curr.next = list1;
+  } else {
+    curr.next = list2;
+  }
+
+  return head.next;
+};
+
+var mergeTwoLists_recursion = function (list1, list2) {
+  if (!list1) {
+    return list2;
+  }
+  if (!list2) {
+    return list1;
+  }
+
+  if (list1.val < list2.val) {
+    list1.next = mergeTwoLists_recursion(list1.next, list2);
+    return list1;
+  } else {
+    list2.next = mergeTwoLists_recursion(list1, list2.next);
+    return list2;
+  }
+};
+
+let node = new Node(1),
+  node1 = new Node(2),
+  node2 = new Node(4),
+  node3 = new Node(1),
+  node4 = new Node(3),
+  node5 = new Node(4);
+
+node.next = node1;
+node1.next = node2;
+
+node3.next = node4;
+node4.next = node5;
+
+let n = mergeTwoLists_recursion(node, node3);
+console.log(n);

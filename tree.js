@@ -1,10 +1,12 @@
+import { Compare, defaultCompareFn } from "./tool.mjs";
+
 /**
  * 节点类
  */
 class Node {
-  val = "";
-  left = "";
-  right = "";
+  val;
+  left;
+  right;
   constructor(val = null, left = null, right = null) {
     this.val = val;
     this.left = left;
@@ -12,25 +14,14 @@ class Node {
   }
 }
 
-const Compare = {
-  LESS_THAN: -1,
-  BIGGER_THAN: 1
-};
-
-function defaultCompareFn(a, b) {
-  if (a === b) {
-    return 0;
-  }
-  return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
-}
-
 /**
  * 二叉搜索树，左节点比父节点小，右节点比父节点大。
  */
 class BinarySearchTree {
-  root = null;
+  root;
   constructor(compareFn = defaultCompareFn) {
     this.compareFn = compareFn;
+    this.root = null;
   }
 
   insert(value) {
@@ -222,13 +213,14 @@ const BalanceFactor = {
 class AVLTree extends BinarySearchTree {
   root = null;
   constructor(compareFn = defaultCompareFn) {
+    super();
     this.compareFn = compareFn;
   }
 
   /**
    * 在AVL树中，左右子树高度差必须是0,-1,1三个值之一，如果不是则需要平衡。
    */
-  getBalanceFactor() {
+  getBalanceFactor(node) {
     const heightDiff =
       this.getNodeHeight(node.left) - this.getNodeHeight(node.right);
     switch (heightDiff) {
