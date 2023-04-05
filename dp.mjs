@@ -114,66 +114,37 @@ function lcs(wordX, wordY) {
 
   let dp = new Array(lenX + 1).fill([]).map((x) => new Array(lenY + 1).fill(0));
 
-  for (let i = 0; i <= lenX; i++) {
-    for (let j = 0; j <= lenY; j++) {
-      if (i === 0 || j === 0) {
-        dp[i][j] === 0;
-      } else if (wordX[i - 1] === wordY[j - 1]) {
+  for (let i = 1; i < dp.length; i++) {
+    for (let j = 1; j <= dp[0].length; j++) {
+      if (wordX[i - 1] == wordY[j - 1]) {
         dp[i][j] = dp[i - 1][j - 1] + 1;
       } else {
         dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
       }
     }
   }
+
+  printSolution(dp, wordX, dp[lenX][lenY]);
 
   return dp[lenX][lenY];
 }
 
-function lcs_Solution(wordX, wordY) {
-  let lenX = wordX.length,
-    lenY = wordY.length;
-
-  let dp = new Array(lenX + 1).fill([]).map((x) => new Array(lenY + 1).fill(0)),
-    solution = new Array(lenX + 1)
-      .fill([])
-      .map((x) => new Array(lenY + 1).fill("0"));
-
-  for (let i = 0; i <= lenX; i++) {
-    for (let j = 0; j <= lenY; j++) {
-      if (i === 0 || j === 0) {
-        dp[i][j] = 0;
-      } else if (wordX[i - 1] === wordY[j - 1]) {
-        dp[i][j] = dp[i - 1][j - 1] + 1;
-        solution[i][j] = "diagonal";
-      } else {
-        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
-        solution[i][j] = dp[i][j] === dp[i - 1][j] ? "top" : "left";
+function printSolution(dp, wordX, max) {
+  let str = "",
+    maxValue = max;
+  label: for (let i = dp.length - 1; i > 0; i--) {
+    for (let j = dp[0].length - 1; j > 0; j--) {
+      if (
+        dp[i][j] > dp[i - 1][j] &&
+        dp[i][j] > dp[i][j - 1] &&
+        dp[i][j] > dp[i - 1][j - 1]
+      ) {
+        str += wordX[i - 1];
+        if (--maxValue == 0) {
+          break label;
+        }
       }
     }
   }
-
-  // return dp[lenX][lenY];
-  return printSolution(solution, dp, lenX, lenY);
-}
-
-function printSolution(solution, wordX, m, n) {
-  let a = m,
-    b = n,
-    x = solution[a][b],
-    answer = "";
-
-  while (x !== "0") {
-    if (solution[a][b] === "diagonal") {
-      answer = wordX[a - 1] + answer;
-      a--;
-      b--;
-    } else if (solution[a][b] === "left") {
-      b--;
-    } else if (solution[a][b] === "top") {
-      a--;
-    }
-    x = solution[a][b];
-  }
-  console.log(answer);
-  return answer;
+  console.log(Array.from(str).reverse());
 }
