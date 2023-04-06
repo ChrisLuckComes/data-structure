@@ -112,21 +112,23 @@ function lcs(wordX, wordY) {
   let lenX = wordX.length,
     lenY = wordY.length;
 
-  let dp = new Array(lenX + 1).fill([]).map((x) => new Array(lenY + 1).fill(0));
+  let dp = new Array(lenX + 1).fill([]).map((x) => new Array(lenY + 1).fill(0)),
+    max = 0;
 
   for (let i = 1; i < dp.length; i++) {
-    for (let j = 1; j <= dp[0].length; j++) {
+    for (let j = 1; j < dp[0].length; j++) {
       if (wordX[i - 1] == wordY[j - 1]) {
         dp[i][j] = dp[i - 1][j - 1] + 1;
       } else {
         dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
       }
+      max = Math.max(max, dp[i][j]);
     }
   }
 
-  printSolution(dp, wordX, dp[lenX][lenY]);
+  printSolution(dp, wordX, max);
 
-  return dp[lenX][lenY];
+  return max;
 }
 
 function printSolution(dp, wordX, max) {
@@ -148,3 +150,62 @@ function printSolution(dp, wordX, max) {
   }
   console.log(Array.from(str).reverse());
 }
+
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number}
+ */
+var findLength = function (nums1, nums2) {
+  let dp = new Array(nums1.length + 1)
+      .fill([])
+      .map((x) => new Array(nums2.length + 1).fill(0)),
+    max = 0;
+
+  for (let i = 0; i < dp.length; i++) {
+    for (let j = 0; j < dp[0].length; j++) {
+      if (nums1[i] === nums2[j]) {
+        dp[i][j] = 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+      max = Math.max(max, dp[i][j]);
+    }
+  }
+
+  return max;
+};
+
+/**
+ * @desc 最长递增子序列以及结果输出
+ * @param {number[]} arr
+ * @return {number}
+ */
+var lengthOfLIS = function (arr) {
+  let res = 1,
+    len = arr.length,
+    dp = new Array(len).fill(1);
+
+  for (let i = 1; i < len; i++) {
+    for (let j = 0; j < i; j++) {
+      if (arr[i] > arr[j]) {
+        dp[i] = Math.max(dp[i], dp[j] + 1);
+      }
+    }
+    res = Math.max(res, dp[i]);
+  }
+
+  let max = res,
+    result = [];
+
+  for (let i = len - 1; i >= 0; i--) {
+    if (dp[i] === max) {
+      result.unshift(arr[i]);
+      max--;
+    }
+  }
+
+  return res;
+};
+
+// lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]);

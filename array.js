@@ -87,4 +87,48 @@ function threeSum(nums) {
   return result;
 }
 
-// console.log(threeSum([0, 1, -1, -1, 2]));
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var nextPermutation = function (nums) {
+  let len = nums.length;
+
+  function reverse(start, end) {
+    while (start < end) {
+      [nums[start], nums[end]] = [nums[end], nums[start]];
+      start++;
+      end--;
+    }
+  }
+
+  for (let i = len - 1; i >= 0; i--) {
+    for (let j = len - 1; j > i; j--) {
+      if (nums[j] > nums[i]) {
+        [nums[i], nums[j]] = [nums[j], nums[i]];
+        reverse(i + 1, len - 1);
+        return;
+      }
+    }
+  }
+
+  reverse(0, len - 1);
+};
+
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var moveZeroes = function (nums) {
+  if (nums.length < 2) {
+    return;
+  }
+
+  let index = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] !== 0) {
+      [nums[index], nums[i]] = [nums[i], nums[index]];
+      index++;
+    }
+  }
+};

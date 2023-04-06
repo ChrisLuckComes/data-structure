@@ -202,8 +202,33 @@ function hotPotato(elementList, num) {
   };
 }
 
+hotPotato([0, 1, 2, 3, 4], 3);
+
 // let { winner } = hotPotato(["a", "b", "c", "d", "e"], 7);
 
 // eliminated.forEach((x) => console.log(`${x}被淘汰`));
 
 // console.log(`${winner}赢了`);
+/**
+ * @param {number} n
+ * @param {number} m
+ * @return {number}
+ */
+var lastRemaining = function (n, m) {
+  let queue = [];
+
+  for (let i = 0; i < n; i++) {
+    queue.push(i);
+  }
+
+  while (queue.length > 1) {
+    for (let i = 1; i < m; i++) {
+      queue.push(queue.shift());
+    }
+    queue.shift();
+  }
+
+  return queue.shift();
+};
+
+lastRemaining(70866, 116922);

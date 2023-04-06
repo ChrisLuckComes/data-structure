@@ -307,6 +307,7 @@ class DoubleLinkedList extends LinkedList {
  * }
  */
 /**
+ * @desc K个一组翻转链表
  * @param {Node} head
  * @param {number} k
  * @return {Node}
@@ -319,13 +320,13 @@ var reverseKGroup = function (head, k) {
   let tail = head;
   for (let i = 0; i < k; i++) {
     if (tail === null) {
-      return head;
+      return tail; //如果不足K个也要翻转，那么不返回，直接break
     }
     tail = tail.next;
   }
 
   let newHead = reverse(head, tail);
-  head.next = reverseKGroup(tail, k);
+  newHead.next = reverseKGroup(tail, k);
 
   return newHead;
 };
@@ -345,7 +346,7 @@ function reverse(head, tail) {
 }
 
 /**
- * @desc
+ * @desc 合并两个有序链表
  * @param {Node} list1
  * @param {Node} list2
  * @return {Node}
@@ -391,18 +392,43 @@ var mergeTwoLists_recursion = function (list1, list2) {
   }
 };
 
-let node = new Node(1),
-  node1 = new Node(2),
-  node2 = new Node(4),
-  node3 = new Node(1),
-  node4 = new Node(3),
-  node5 = new Node(4);
+// let node = new Node(1),
+//   node1 = new Node(2),
+//   node2 = new Node(4),
+//   node3 = new Node(1),
+//   node4 = new Node(3),
+//   node5 = new Node(4);
 
-node.next = node1;
-node1.next = node2;
+// node.next = node1;
+// node1.next = node2;
 
-node3.next = node4;
-node4.next = node5;
+// node3.next = node4;
+// node4.next = node5;
 
-let n = mergeTwoLists_recursion(node, node3);
-console.log(n);
+// let n = mergeTwoLists_recursion(node, node3);
+// console.log(n);
+
+/**
+ * @desc 删除链表倒数第K个节点
+ * @param {Node} head
+ * @param {number} n
+ * @return {Node}
+ */
+var removeNthFromEnd = function (head, n) {
+  let newHead = new Node(0, head),
+    slow = newHead,
+    fast = newHead;
+
+  while (n--) {
+    fast = fast.next;
+  }
+
+  while (fast.next) {
+    slow = slow.next;
+    fast = fast.next;
+  }
+
+  slow.next = slow.next.next;
+
+  return newHead.next;
+};
